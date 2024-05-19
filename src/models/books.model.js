@@ -25,6 +25,11 @@ const BookSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  //default image it can be on server or front end but here its on server
+  //   image: {
+  //     type: String,
+  //     default: "uploads/examples.jpeg",
+  //   },
 });
 
 module.exports = mongoose.model("Book", BookSchema);
