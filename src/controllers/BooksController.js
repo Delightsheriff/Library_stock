@@ -23,23 +23,46 @@ const createBook = async (req, res) => {
 };
 
 const getAllBooks = async (req, res) => {
-  //   const books = await Book.find({});
-  //   res.send(books);
-  res.send("all books ");
+  const books = await Book.find({});
+  res.status(StatusCodes.OK).json({ books, count: books.length });
 };
 
 const getSingleBook = async (req, res) => {
   //   const book = await Book.findById(req.params.id);
-  //   res.send(book);
-  res.send("single book");
+
+  const { id: bookId } = req.params;
+  const book = await Book.findOne({ _id: bookId });
+
+  if (!book) {
+    throw new customError.NotFoundError(`No book with id : ${bookId}`);
+  }
+  res.status(StatusCodes.OK).json({ book });
 };
 
 const updateBook = async (req, res) => {
-  res.send("Book updated successfully");
+  const { id: bookId } = req.params;
+
+  const book = await Book.findOneAndUpdate({ _id: bookId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!book) {
+    throw new customError.NotFoundError(`No book with id : ${bookId}`);
+  }
+
+  res.status(StatusCodes.OK).json({ book });
 };
 
 const deleteBook = async (req, res) => {
-  res.send("Book deleted successfully");
+  const { id: bookId } = req.params;
+
+  const book = await Book.findOne({ _id: bookId });
+  if (!book) {
+    throw new customError.NotFoundError(`No book with id : ${bookId}`);
+  }
+  await book.deleteOne();
+
+  res.status(StatusCodes.OK).json({ msg: "Success! book removed" });
 };
 
 module.exports = {
