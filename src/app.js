@@ -19,6 +19,8 @@ app.use("*", (req, res) => {
 
 const PORT = envConstants.PORT || 3936;
 
+console.log("our MongoDB connection string is: " + envConstants.MONGO_URI);
+
 //connect to database
 mongoose
   .connect(envConstants.MONGO_URI)
