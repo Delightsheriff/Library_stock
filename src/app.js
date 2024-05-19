@@ -11,6 +11,8 @@ app.get("/", async (req, res) => {
   return res.status(200).json({ message: "Welcome to the library api" });
 });
 
+app.use("/api/vi/auth", require("./routes/auth.routes"));
+
 app.use("*", (req, res) => {
   return res.status(404).json({ error: "Route not found", statusText: "fail" });
 });
