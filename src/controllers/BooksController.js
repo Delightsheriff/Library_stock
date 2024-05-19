@@ -1,12 +1,25 @@
 const Book = require("../models/books.model");
+const { StatusCodes } = require("http-status-codes");
+const customError = require("../errors");
 
 const createBook = async (req, res) => {
-  // const { title, author, description, coursecode, quantity, department } = req.body;
-  // if (!title || !author || !description || !coursecode || !quantity || !department) {
-  //     return res.status(400).json({ msg: "Please fill in all fields." }); // 400 Bad Request
-  // }
+  const { title, author, description, coursecode, quantity, department } =
+    req.body;
 
-  res.send("Book created successfully");
+  if (
+    !title ||
+    !author ||
+    !description ||
+    !coursecode ||
+    !quantity ||
+    !department
+  ) {
+    throw new customError.BadRequestError("Please provide all values");
+  }
+
+  const book = await Book.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({ book });
 };
 
 const getAllBooks = async (req, res) => {
