@@ -3,8 +3,14 @@ const { StatusCodes } = require("http-status-codes");
 const customError = require("../errors");
 
 const createBook = async (req, res) => {
-  const { title, author, description, coursecode, quantity, department } =
-    req.body;
+  const {
+    tittle: title,
+    author,
+    description,
+    coursecode,
+    quantity,
+    department,
+  } = req.body;
 
   if (
     !title ||
@@ -97,6 +103,7 @@ const borrowBook = async (req, res) => {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
+    console.log(error);
   }
 };
 
@@ -136,6 +143,8 @@ module.exports = {
   getSingleBook,
   updateBook,
   deleteBook,
+  borrowBook,
+  returnBook,
 };
 
 // const uploadImage = async (req, res) => {

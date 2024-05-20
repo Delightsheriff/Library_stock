@@ -5,7 +5,16 @@ const BorrowedBySchema = new mongoose.Schema({
   matricNumber: { type: String, required: true },
   studentDepartment: { type: String, required: true },
   studentName: { type: String, required: true },
-  returnTime: { type: Date, required: true },
+  returnTime: {
+    type: Date,
+    required: true,
+    default: () => {
+      // Calculate one week from the current date
+      const oneWeekFromNow = new Date();
+      oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+      return oneWeekFromNow;
+    },
+  },
   returned: { type: Boolean, default: false },
 });
 
