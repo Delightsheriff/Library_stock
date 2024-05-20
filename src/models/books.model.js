@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+//borrower or student schema
+const BorrowedBySchema = new mongoose.Schema({
+  matricNumber: { type: String, required: true },
+  studentDepartment: { type: String, required: true },
+  studentName: { type: String, required: true },
+  returnTime: { type: Date, required: true },
+  returned: { type: Boolean, default: false },
+});
+
 const BookSchema = mongoose.Schema({
   tittle: {
     type: String,
@@ -25,6 +34,7 @@ const BookSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  borrowedBy: BorrowedBySchema,
   //default image it can be on server or front end but here its on server
   //   image: {
   //     type: String,
