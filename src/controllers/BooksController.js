@@ -65,6 +65,71 @@ const deleteBook = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! book removed" });
 };
 
+const borrowBook = async (req, res) => {
+  try {
+    // const { id: bookId } = req.params;
+    const {
+      params: { id: bookId },
+      body: { matricNumber, studentDepartment, studentName },
+    } = req;
+    const book = await Book.findById({ _id: bookId });
+    if (!book) {
+      // return res.status(StatusCodes.NOT_FOUND).json({ message: "Book not found" });
+      throw new customError.NotFoundError(`Book with id: ${bookId} not found`);
+    }
+    if (book.quantity < 1) {
+      // return res.status(StatusCodes.BAD_REQUEST).json({ message: "No available copies" });
+      throw new customError.BadRequestError(`no available copies`);
+    }
+
+    book.borrowedBy = {
+      matricNumber,
+      studentDepartment,
+      studentName,
+    };
+    book.quantity -= 1;
+
+    await book.save();
+    res
+      .status(StatusCodes.OK)
+      .json({ message: "Book borrowed successfully", book });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
+  }
+};
+
+// Return a book
+const returnBook = async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    if (!book.borrowedBy || book.borrowedBy.returned) {
+      // return res.status(StatusCodes.BAD_REQUEST).json({
+      //   message: "Book was not borrowed or has already been returned",
+      // });
+      throw new customError.BadRequestError(
+        `Book was not borrowed or has already been returned`
+      );
+    }
+
+    book.borrowedBy.returned = true;
+    book.quantity += 1;
+
+    await book.save();
+    res
+      .status(StatusCodes.OK)
+      .json({ message: "Book returned successfully", book });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
+  }
+};
+
 module.exports = {
   createBook,
   getAllBooks,
