@@ -4,4 +4,5 @@ module.exports = {
   ALLOWED_EMAILS: process.env.ALLOWED_EMAILS,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   JWT_REFRESH_SECRET_KEY: process.env.JWT_REFRESH_SECRET_KEY,
+  JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
 };

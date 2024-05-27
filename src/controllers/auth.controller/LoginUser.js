@@ -38,21 +38,25 @@ module.exports = async (req, res) => {
     const jwt = await sign(
       { id: userExist._id, username: userExist.username },
       envConstants.JWT_SECRET_KEY,
+      {
+        expiresIn: envConstants.JWT_EXPIRATION_TIME,
+      },
     );
 
     const refreshToken = sign(
       { id: userExist._id, username: userExist.username },
       envConstants.JWT_REFRESH_SECRET_KEY,
+      {
+        expiresIn: envConstants.JWT_EXPIRATION_TIME,
+      },
     );
 
-    return res
-      .status(201)
-      .json({
-        statusText: "Login Success",
-        jwt,
-        refreshToken,
-        user: { ...userExist._doc, password: "hidden" },
-      });
+    return res.status(201).json({
+      statusText: "Login Success",
+      jwt,
+      refreshToken,
+      user: { ...userExist._doc, password: "hidden" },
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error" });
