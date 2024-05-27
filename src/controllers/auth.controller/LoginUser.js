@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
       return res.status(401).send("Unauthorized");
     }
 
-    const userExist = await User.findOne({ email: body.email }).select(
+    const userExist = await User.findOne({ email: req.body.email }).select(
       "+password",
     );
     if (!userExist) {
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(body.password, userExist.password);
+    const isMatch = await bcrypt.compare(req.body.password, userExist.password);
 
     if (!isMatch) {
       return res.status(400).json({
@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
       });
     }
 
-    const jwt = sign(
+    const jwt = await sign(
       { id: userExist._id, username: userExist.username },
       envConstants.JWT_SECRET_KEY,
     );
@@ -47,7 +47,12 @@ module.exports = async (req, res) => {
 
     return res
       .status(201)
-      .json({ statusText: "Login Success", jwt, refreshToken });
+      .json({
+        statusText: "Login Success",
+        jwt,
+        refreshToken,
+        user: { ...userExist._doc, password: "hidden" },
+      });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error" });

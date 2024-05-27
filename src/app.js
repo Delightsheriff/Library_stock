@@ -12,7 +12,7 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/api/vi/auth", require("./routes/auth.routes"));
-app.use("/api/vi/books", require("./routes/books.route"));
+// app.use("/api/vi/books", require("./routes/books.route"));
 
 app.use("*", (req, res) => {
   return res.status(404).json({ error: "Route not found", statusText: "fail" });
