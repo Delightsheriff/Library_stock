@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../../models/user.model");
 const envConstants = require("../../configs/constants");
-const checkPasswordStrength = require("../../utils/helper");
 
 module.exports = async (req, res) => {
   const { username, email, password } = req.body;
@@ -20,7 +19,7 @@ module.exports = async (req, res) => {
     );
 
     if (!allowedEmails.includes(email.toLowerCase())) {
-      return res.status(401).send("Unauthorized Email");
+      return res.status(401).json({ msg: "This email is Unauthorized" });
     }
 
     //checks if user already exists
@@ -31,12 +30,10 @@ module.exports = async (req, res) => {
         .json({ error: "User already exist", statusText: "fail" });
     }
 
-    // Check if password is strong
-    const passwordStrength = checkPasswordStrength(password);
-    console.log(passwordStrength); // Debugging log
-    if (!passwordStrength.isValid) {
-      return res.status(400).json({ msg: passwordStrength.message });
-    }
+    if (password.length < 6)
+      return res
+        .status(400)
+        .json({ msg: "Password must be at least 6 characters." });
 
     //hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);

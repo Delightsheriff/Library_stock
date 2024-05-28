@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const allowedEmails = envConstants.ALLOWED_EMAILS.split(",");
 
     if (!allowedEmails.includes(email)) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).json({ msg: "This email is Unauthorized" });
     }
 
     const userExist = await User.findOne({ email: req.body.email }).select(
@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
     );
 
     return res.status(201).json({
-      statusText: "Login Success",
+      statusText: "Login Successful",
       jwt,
       refreshToken,
       user: { ...userExist._doc, password: "hidden" },
