@@ -1,136 +1,3 @@
-// const Book = require("../models/books.model");
-// const { StatusCodes } = require("http-status-codes");
-// const customError = require("../errors");
-
-// const createBook = async (req, res) => {
-//   const {
-//     tittle: title,
-//     author,
-//     description,
-//     coursecode,
-//     quantity,
-//     department,
-//   } = req.body;
-
-//   if (
-//     !title ||
-//     !author ||
-//     !description ||
-//     !coursecode ||
-//     !quantity ||
-//     !department
-//   ) {
-//     throw new customError.BadRequestError("Please provide all values");
-//   }
-
-//   const book = await Book.create(req.body);
-
-//   res.status(StatusCodes.CREATED).json({ book });
-// };
-
-// const borrowBook = async (req, res) => {
-//   try {
-//     // const { id: bookId } = req.params;
-//     const {
-//       params: { id: bookId },
-//       body: { matricNumber, studentDepartment, studentName },
-//     } = req;
-//     const book = await Book.findById({ _id: bookId });
-//     if (!book) {
-//       // return res.status(StatusCodes.NOT_FOUND).json({ message: "Book not found" });
-//       throw new customError.NotFoundError(`Book with id: ${bookId} not found`);
-//     }
-//     if (book.quantity < 1) {
-//       // return res.status(StatusCodes.BAD_REQUEST).json({ message: "No available copies" });
-//       throw new customError.BadRequestError(`no available copies`);
-//     }
-
-//     book.borrowedBy = {
-//       matricNumber,
-//       studentDepartment,
-//       studentName,
-//     };
-//     book.quantity -= 1;
-
-//     await book.save();
-//     res
-//       .status(StatusCodes.OK)
-//       .json({ message: "Book borrowed successfully", book });
-//   } catch (error) {
-//     res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: error.message });
-//     console.log(error);
-//   }
-// };
-
-// // Return a book
-// const returnBook = async (req, res) => {
-//   try {
-//     const book = await Book.findById(req.params.id);
-//     if (!book) {
-//       return res.status(404).json({ message: "Book not found" });
-//     }
-//     if (!book.borrowedBy || book.borrowedBy.returned) {
-//       // return res.status(StatusCodes.BAD_REQUEST).json({
-//       //   message: "Book was not borrowed or has already been returned",
-//       // });
-//       throw new customError.BadRequestError(
-//         `Book was not borrowed or has already been returned`
-//       );
-//     }
-
-//     book.borrowedBy.returned = true;
-//     book.quantity += 1;
-
-//     await book.save();
-//     res
-//       .status(StatusCodes.OK)
-//       .json({ message: "Book returned successfully", book });
-//   } catch (error) {
-//     res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: error.message });
-//   }
-// };
-
-// module.exports = {
-//   createBook,
-//   getAllBooks,
-//   getSingleBook,
-//   updateBook,
-//   deleteBook,
-//   borrowBook,
-//   returnBook,
-// };
-
-// // const uploadImage = async (req, res) => {
-// //     console.log(req.files);
-// //     //check if file exists from postman
-// //     if (!req.files) {
-// //       throw new customError.BadRequestError("no image uploaded");
-// //     }
-
-// //     //if uploaded file is an image
-// //     const productImage = req.files.image;
-// //     if (!productImage.mimetype.startswith("image")) {
-// //       throw new customError.BadRequestError("please upload image");
-// //     }
-
-// //     const maxSize = 1024 * 1024;
-// //     if (!productImage.size > maxSize) {
-// //       throw new customError.BadRequestError("please upload image less than 1 mb");
-// //     }
-
-// //     //set path
-// //     const imagePath = path.join(
-// //       __dirname /**get current dirrectory  */,
-// //       "../public/uploads/" + `${productImage.name}`
-// //     );
-// //     await productImage.mv(imagePath);
-// //     res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` });
-// //   };
-
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker"); // or 'faker' depending on your version
 const Book = require("../../models/books.model"); // Ensure correct path to your Book model
@@ -157,6 +24,16 @@ const titles = {
     "Effective Java",
     "Programming Ruby",
     "C++ Primer",
+    "Python Crash Course",
+    "Head First Java",
+    "Eloquent JavaScript",
+    "Learning Perl",
+    "The C Programming Language",
+    "Python Cookbook",
+    "JavaScript: The Definitive Guide",
+    "Clean Code in Python",
+    "Java Concurrency in Practice",
+    "Ruby on Rails Tutorial",
   ],
   Software_Development: [
     "Clean Code",
@@ -164,6 +41,16 @@ const titles = {
     "Code Complete",
     "Refactoring",
     "The Mythical Man-Month",
+    "Domain-Driven Design",
+    "Test-Driven Development by Example",
+    "Design Patterns: Elements of Reusable Object-Oriented Software",
+    "Continuous Delivery",
+    "Extreme Programming Explained",
+    "Agile Software Development: Principles, Patterns, and Practices",
+    "Domain-Specific Languages",
+    "Implementing Domain-Driven Design",
+    "The Clean Coder",
+    "Agile Estimating and Planning",
   ],
   Computer_Science: [
     "Introduction to Algorithms",
@@ -171,6 +58,16 @@ const titles = {
     "Algorithms Unlocked",
     "Computer Science: An Overview",
     "Structure and Interpretation of Computer Programs",
+    "Concrete Mathematics",
+    "Computer Organization and Design",
+    "Operating System Concepts",
+    "Database Management Systems",
+    "Artificial Intelligence: Foundations of Computational Agents",
+    "Discrete Mathematics and Its Applications",
+    "Automata Theory, Languages, and Computation",
+    "Computer Networks",
+    "Compilers: Principles, Techniques, and Tools",
+    "Graph Theory",
   ],
   Web_Development: [
     "HTML and CSS: Design and Build Websites",
@@ -178,6 +75,16 @@ const titles = {
     "Learning PHP, MySQL & JavaScript",
     "You Don't Know JS",
     "Eloquent JavaScript",
+    "Node.js in Action",
+    "React: Up & Running",
+    "Learning Web Design",
+    "Vue.js: Up and Running",
+    "Learning React",
+    "CSS Secrets",
+    "Learning Node.js",
+    "AngularJS: Up and Running",
+    "Head First HTML and CSS",
+    "Responsive Web Design with HTML5 and CSS3",
   ],
   Database_Management: [
     "SQL for Dummies",
@@ -185,6 +92,16 @@ const titles = {
     "Learning SQL",
     "Seven Databases in Seven Weeks",
     "The Data Warehouse Toolkit",
+    "SQL Performance Explained",
+    "High Performance MySQL",
+    "MongoDB: The Definitive Guide",
+    "SQL Cookbook",
+    "NoSQL Distilled",
+    "Learning MySQL",
+    "Oracle Database 12c: The Complete Reference",
+    "Database Design for Mere Mortals",
+    "PostgreSQL: Up and Running",
+    "Learning Apache Cassandra",
   ],
   Artificial_Intelligence: [
     "Artificial Intelligence: A Modern Approach",
@@ -192,6 +109,16 @@ const titles = {
     "Machine Learning Yearning",
     "Pattern Recognition and Machine Learning",
     "The Hundred-Page Machine Learning Book",
+    "Python Machine Learning",
+    "Reinforcement Learning: An Introduction",
+    "Deep Reinforcement Learning Hands-On",
+    "Natural Language Processing with Python",
+    "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+    "Machine Learning: A Probabilistic Perspective",
+    "Neural Networks and Deep Learning",
+    "Deep Learning for Computer Vision",
+    "Artificial Intelligence for Games",
+    "Introduction to Autonomous Robots",
   ],
   Cybersecurity: [
     "The Web Application Hacker's Handbook",
@@ -199,6 +126,16 @@ const titles = {
     "Hacking: The Art of Exploitation",
     "Cybersecurity and Cyberwar",
     "Security Engineering",
+    "CISSP All-in-One Exam Guide",
+    "Practical Malware Analysis",
+    "The Tangled Web",
+    "Network Security Essentials",
+    "Cryptography Engineering",
+    "Penetration Testing: A Hands-On Introduction to Hacking",
+    "Black Hat Python",
+    "Social Engineering: The Art of Human Hacking",
+    "Web Hacking 101",
+    "Gray Hat Hacking: The Ethical Hacker's Handbook",
   ],
   Computer_Graphics: [
     "Real-Time Rendering",
@@ -206,6 +143,16 @@ const titles = {
     "OpenGL Programming Guide",
     "Mathematics for 3D Game Programming and Computer Graphics",
     "3D Computer Graphics",
+    "Physically Based Rendering",
+    "Computer Graphics: From Pixels to Programmable Graphics Hardware",
+    "GPU Gems",
+    "Interactive Computer Graphics",
+    "Computer Animation: Algorithms and Techniques",
+    "Advanced Graphics Programming Using OpenGL",
+    "Graphics Shaders: Theory and Practice",
+    "Introduction to Computer Graphics",
+    "Foundations of 3D Computer Graphics",
+    "Practical Rendering and Computation with Direct3D 11",
   ],
   Networking: [
     "Computer Networking: A Top-Down Approach",
@@ -213,6 +160,16 @@ const titles = {
     "Data Communications and Networking",
     "Internetworking with TCP/IP",
     "Network Security Essentials",
+    "TCP/IP Illustrated",
+    "Computer Networking Problems and Solutions",
+    "Wireshark Network Analysis",
+    "Computer Networking: Principles, Protocols and Practice",
+    "Network Security: Private Communication in a Public World",
+    "Data and Computer Communications",
+    "The TCP/IP Guide",
+    "Network Warrior",
+    "Network Forensics: Tracking Hackers through Cyberspace",
+    "Network Security Technologies and Solutions",
   ],
   Operating_Systems: [
     "Operating System Concepts",
@@ -220,8 +177,23 @@ const titles = {
     "Understanding the Linux Kernel",
     "Windows Internals",
     "The Design of the UNIX Operating System",
+    "Operating Systems: Design and Implementation",
+    "Operating Systems: Three Easy Pieces",
+    "Linux Kernel Development",
+    "Advanced Programming in the UNIX Environment",
+    "Linux Device Drivers",
+    "Windows System Programming",
+    "The Linux Programming Interface",
+    "Linux Kernel Networking",
+    "Linux System Programming",
+    "Linux Device Drivers Development",
   ],
 };
+
+const startDate = new Date(
+  new Date().getTime() - 10 * 365 * 24 * 60 * 60 * 1000,
+);
+
 const createBooks = () => {
   const books = [];
   for (let i = 0; i < 400; i++) {
@@ -232,7 +204,7 @@ const createBooks = () => {
       author: faker.person.fullName(), // Correct method for generating a full name
       ISBN: faker.datatype.uuid(),
       publisher: faker.company.name(),
-      publication_date: faker.date.past(),
+      publication_date: faker.date.between(startDate, new Date()),
       description: faker.lorem.paragraph(),
       category: category,
       quantity: faker.datatype.number({ min: 1, max: 20 }),
