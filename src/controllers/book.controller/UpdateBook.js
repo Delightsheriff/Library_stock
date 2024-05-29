@@ -3,7 +3,6 @@ const Book = require("../../models/books.model");
 module.exports = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
