@@ -1,10 +1,22 @@
 const Borrowing = require("../../models/borrow.model");
+const Book = require("../../models/books.model");
+const User = require("../../models/user.model");
 
 module.exports = async (req, res) => {
   const { bookId, studentName, matriculationNumber, returnDate, librarianId } =
     req.body;
 
   try {
+    if (
+      !bookId ||
+      !studentName ||
+      !matriculationNumber ||
+      !returnDate ||
+      !librarianId
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const book = await Book.findById(bookId);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
@@ -28,8 +40,9 @@ module.exports = async (req, res) => {
     book.quantity -= 1;
     await book.save();
 
-    res.json({ message: "Book borrowed successfully" });
+    return res.json({ message: "Book borrowed successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error borrowing book" });
+    console.log(error);
+    return res.status(500).json({ message: "Error borrowing book" });
   }
 };

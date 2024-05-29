@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, mongoose } = require("mongoose");
 
 const BorrowSchema = new Schema({
   book: {
@@ -26,7 +26,13 @@ const BorrowSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  librarian: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 const Borrowing = model("Borrowing", BorrowSchema);
+
 module.exports = Borrowing;
