@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       return res.status(404).json({ message: "Book not found" });
     }
 
-    res.json(book);
+    return res.status(200).json({ msg: "Found it", book });
   } catch (error) {
     res.status(500).json({ message: "Error fetching book" });
   }

@@ -10,6 +10,7 @@ module.exports = async (req, res) => {
     description,
     category,
     quantity,
+    location,
   } = req.body;
 
   try {
@@ -21,7 +22,8 @@ module.exports = async (req, res) => {
       !publication_date ||
       !description ||
       !category ||
-      !quantity
+      !quantity ||
+      !location
     ) {
       return res.status(400).json({ message: "Please provide all values" });
     }
@@ -34,6 +36,7 @@ module.exports = async (req, res) => {
       description,
       category,
       quantity,
+      location,
     });
 
     res.status(201).json({ book });
